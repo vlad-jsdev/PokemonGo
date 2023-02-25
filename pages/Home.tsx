@@ -1,9 +1,11 @@
 import React, {useState, useEffect} from 'react';
-import {View, StyleSheet} from 'react-native';
+import {View, StyleSheet, Dimensions, Text} from 'react-native';
 import {useLazyQuery, gql} from '@apollo/client';
 
 import Search from '../components/Search';
 import PokemonList from '../components/PokemonList';
+
+const heightScreen = Dimensions.get('window').height;
 
 const GET_POKEMONS = gql`
   query GetPokemons($items: Int!, $search: String!) {
@@ -19,39 +21,36 @@ const GET_POKEMONS = gql`
   }
 `;
 
+type Pokemon = {
+  __typename: string;
+  id: number;
+  name: string;
+  weight: number;
+};
+
 const Home = () => {
   const [isAmountItems, setAmountItems] = useState<number>(0);
   const [isText, setText] = useState<string>('');
-  const [isData, setData] = useState<any>([]);
-
-  const [loadItems, {loading, error, data}] = useLazyQuery(GET_POKEMONS, {
+  const [isData, setData] = useState<Pokemon[] | []>([]);
+  // TODO: Style Loading and make Error if data not fetching
+  const [loadItems, {loading, data}] = useLazyQuery(GET_POKEMONS, {
     variables: {items: isAmountItems, search: isText?.toLowerCase()},
-    // onCompleted: pokemons =>
-    //   setData([...isData, ...pokemons.pokemon_v2_pokemon]),
   });
-
-  console.log('loading: ', loading);
-  console.log('error: ', error);
 
   const handleLoadMore = () => {
     setAmountItems(isAmountItems + 16);
     loadItems();
   };
 
-  console.log('text: ', isText);
   useEffect(() => {
     loadItems();
   }, []);
 
   useEffect(() => {
-    console.log('DataFIRST: ', data);
-    console.log('isData: ', isData);
-
     if (isText === '' && data?.pokemon_v2_pokemon) {
       setData([...new Set([...isData, ...data.pokemon_v2_pokemon])]);
     }
     if (data?.pokemon_v2_pokemon.length === 0 || isText.length === 1) {
-      console.log('here2');
       setAmountItems(0);
       setData([]);
       loadItems();
@@ -65,27 +64,28 @@ const Home = () => {
   return (
     <View style={styles.sectionContainer}>
       <Search setText={setText} text={isText} />
-      <PokemonList data={isData} loadMore={handleLoadMore} />
+      {loading ? (
+        <Text style={styles.loadingStyle}>Loading...</Text>
+      ) : (
+        <PokemonList data={isData} loadMore={handleLoadMore} />
+      )}
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   sectionContainer: {
-    marginTop: 32,
+    height: heightScreen,
     paddingHorizontal: 24,
+    backgroundColor: '#947464',
   },
   sectionTitle: {
     fontSize: 24,
     fontWeight: '600',
+    color: '#2C4454',
   },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
-  },
-  highlight: {
-    fontWeight: '700',
+  loadingStyle: {
+    fontSize: 20,
   },
 });
 

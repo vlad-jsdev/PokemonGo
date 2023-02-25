@@ -1,4 +1,5 @@
 import React from 'react';
+import {SafeAreaView} from 'react-native';
 import {ApolloClient, InMemoryCache, ApolloProvider} from '@apollo/client';
 
 import Home from './pages/Home';
@@ -11,7 +12,9 @@ const client = new ApolloClient({
 const App = () => {
   return (
     <ApolloProvider client={client}>
-      <Home />
+      <SafeAreaView>
+        <Home />
+      </SafeAreaView>
     </ApolloProvider>
   );
 };

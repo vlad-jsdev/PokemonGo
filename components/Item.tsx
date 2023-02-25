@@ -7,7 +7,13 @@ import {
 } from 'accordion-collapse-react-native';
 import Info from './Info';
 
-const Item = ({name, id}: any) => {
+// TODO: import in external file all types
+type ItemProps = {
+  id: number;
+  name: string;
+};
+
+const Item = ({name, id}: ItemProps) => {
   return (
     <Collapse>
       <CollapseHeader>
@@ -34,12 +40,15 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     marginVertical: 10,
     borderWidth: 1,
+    borderColor: '#A57510',
     borderRadius: 20,
+    backgroundColor: '#D8A63E',
   },
   text: {
     fontSize: 20,
     alignSelf: 'center',
     marginRight: 10,
+    color: '#2C4454',
   },
   image: {
     width: 100,

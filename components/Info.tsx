@@ -1,26 +1,20 @@
 import React, {useEffect, useState} from 'react';
-import {Text, View} from 'react-native';
+import {StyleSheet, View} from 'react-native';
 import {useQuery, gql} from '@apollo/client';
+import Details from './Details';
 
 const GET_POKEMON_INFO = gql`
   query GetPokemonInfo($id: Int!) {
     pokemon_v2_pokemonspecies(where: {id: {_eq: $id}}) {
       base_happiness
       capture_rate
-      evolution_chain_id
       gender_rate
       has_gender_differences
       is_baby
       is_legendary
       is_mythical
-      id
       hatch_counter
-      growth_rate_id
       forms_switchable
-      evolves_from_species_id
-      pokemon_color_id
-      pokemon_habitat_id
-      pokemon_shape_id
     }
     pokemon_v2_pokemonstat(where: {id: {_eq: $id}}) {
       base_stat
@@ -34,11 +28,35 @@ const GET_POKEMON_INFO = gql`
     }
   }
 `;
-const Info = ({id}: any) => {
-  const {loading, error, data} = useQuery(GET_POKEMON_INFO, {
+
+// TODO: import in external file all types
+type isInfoIF = {
+  __typename: string;
+  base_happiness: number;
+  capture_rate: number;
+  gender_rate: number;
+  has_gender_differences: boolean;
+  is_baby: boolean;
+  is_legendary: boolean;
+  is_mythical: boolean;
+  hatch_counter: number;
+  forms_switchable: boolean;
+  base_stat: number;
+  effort: number;
+  name: string;
+  accuracy: number;
+};
+
+type InfoProps = {
+  id: number;
+};
+
+const Info = ({id}: InfoProps) => {
+  // TODO: Style Loading and make Error if data not fetching
+  const {data} = useQuery(GET_POKEMON_INFO, {
     variables: {id: id},
   });
-  const [isInfo, setInfo] = useState({});
+  const [isInfo, setInfo] = useState<isInfoIF>();
   useEffect(() => {
     if (
       data &&
@@ -55,12 +73,23 @@ const Info = ({id}: any) => {
       });
     }
   }, [data]);
-  console.log('ITEM: ', isInfo);
   return (
-    <View>
-      <Text>{id}</Text>
+    <View style={styles.container}>
+      {isInfo &&
+        Object.keys(isInfo).map(item => {
+          const infoItem = isInfo[item as keyof isInfoIF];
+          return <Details key={item} info={infoItem} keyItem={item} />;
+        })}
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    backgroundColor: '#F6D676',
+    borderRadius: 20,
+    padding: 20,
+  },
+});
 
 export default Info;
