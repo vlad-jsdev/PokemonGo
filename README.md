@@ -10,6 +10,10 @@ The application also includes a search feature that allows users to filter the l
 
 In summary, your app provides users with an intuitive interface for browsing and searching a large list of Pokemons, with detailed information about each Pokemon's statistics readily available.
 
+# Decription
+
+Using the graphQl library, I set the parameters for the number of Pokemon that I can pick up from the server and set the interval so that when I scroll to the end of the list, the next 16 Pokemon are loaded. When you click on a specific Pokemon, the characteristics of the Pokemon open, to get the data of a specific Pokemon, I make a request by ID
+
 ## Requirements
 
 1. OS X - This repo only contains the iOS implementation right now, and Xcode only runs on Mac.
