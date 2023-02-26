@@ -10,6 +10,10 @@
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx"
   },
   "dependencies": {
+    "@apollo/client": "^3.7.9",
+    "accordion-collapse-react-native": "^1.1.1",
+    "eslint-plugin-react-hooks": "^5.0.0-next-bfb9cbd8c-20230223",
+    "graphql": "^16.6.0",
     "react": "18.1.0",
     "react-native": "0.70.6"
   },
@@ -28,6 +32,7 @@
     "eslint": "^7.32.0",
     "jest": "^26.6.3",
     "metro-react-native-babel-preset": "0.72.3",
+    "prettier": "2.8.4",
     "react-test-renderer": "18.1.0",
     "typescript": "^4.9.5"
   },
